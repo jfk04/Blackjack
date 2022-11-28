@@ -62,11 +62,6 @@ if __name__=="__main__":
             cards.pop(0)
             if counter < 21:
                 eingabe = input("Möchtest du noch eine Karte?(j/n) ")
-            elif counter == 21:
-                print("Blackjack! Herzlichen Glückwunsch, du hast gewonnen.")
-                punkte += 1
-                print(f"Spieler: {punkte} \nDealer: {dealer_punkte}")
-                break
             elif counter > 21:
                 print("Du hast mehr als 21. Du hast leider verloren.")
                 dealer_punkte += 1
@@ -85,8 +80,8 @@ if __name__=="__main__":
             elif dealer_counter < counter:
                 print("Du hast mehr Punkte als der Dealer. Du hast gewonnen.")
                 punkte += 1
-            elif dealer_counter > counter:
-                print("Der Dealer hat mehr Punkte als du. Du hast verloren")
+            elif dealer_counter >= counter:
+                print("Der Dealer hat gewonnen")
                 dealer_punkte += 1
             print(f"Spieler: {punkte} \nDealer: {dealer_punkte}")
         eingabe = input("Möchtest du noch eine Runde spielen? (j/n)")    
