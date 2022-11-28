@@ -1,0 +1,93 @@
+import random
+import numpy
+
+deck = ["2","3","4","5","6","7","8","9","10","B","D","K","A"]
+cards = deck * 4
+random.shuffle(cards)
+punkte = 0
+dealer_punkte = 0
+
+def Karten_umrechnen(counter,card):
+    wert = 0
+    if card == "B" or card == "D" or card == "K":
+        wert = 10
+    elif card == "A" and counter > 10:
+        wert = 1
+    elif card == "A" and counter <= 10:
+        wert = 11
+    else:
+        wert = int(card)
+    return wert
+
+def karten_zaehlen(karten):
+    counter = 0
+    for i in range(len(karten)):
+        counter += Karten_umrechnen(counter, karten[i])
+    if counter > 21 and "A" in karten:
+        counter -= 10
+    return counter
+
+
+    
+
+if __name__=="__main__":
+    eingabe = input("Hezlich Wilkommen zu Blackjack. Möchtest du eine Runde spielen?(j/n) ").lower()
+    while eingabe == "j":
+        if len(cards) < 10:
+            cards = deck * 4
+            random.shuffle(cards)
+        player_cards = cards[0] + cards[2]
+        dealer_cards = cards[1] + cards[3]
+        dealer_first_card = cards[1]
+        print(f"Deine Karten: {' '.join(map(str,player_cards))}")
+        print(f"Dealer Karten: {cards[1]}")
+        counter = karten_zaehlen(player_cards)
+        dealer_counter = karten_zaehlen(dealer_cards)
+        cards.pop(0)
+        cards.pop(0)
+        cards.pop(0)
+        cards.pop(0)
+        if counter < 21:
+            eingabe = input("Möchtest du noch eine Karte?(j/n) ")
+        elif counter == 21:
+            print("Blackjack! Herzlichen Glückwunsch, du hast gewonnen.")
+            punkte += 2 # Blackjack zählt 2 Punkte
+            eingabe = input("Möchtest du noch eine Runde spielen?(j/n) ")
+            continue
+        while eingabe == "j":
+            player_cards = player_cards + cards[0]
+            counter = karten_zaehlen(player_cards)
+            print(f"Deine Karten: {' '.join(player_cards)}")
+            print(f"Dealer Karten: {' '.join(dealer_first_card)}")
+            cards.pop(0)
+            if counter < 21:
+                eingabe = input("Möchtest du noch eine Karte?(j/n) ")
+            elif counter == 21:
+                print("Blackjack! Herzlichen Glückwunsch, du hast gewonnen.")
+                punkte += 1
+                print(f"Spieler: {punkte} \nDealer: {dealer_punkte}")
+                break
+            elif counter > 21:
+                print("Du hast mehr als 21. Du hast leider verloren.")
+                dealer_punkte += 1
+                print(f"Spieler: {punkte} \nDealer: {dealer_punkte}")
+                break
+        if counter < 21:
+            while dealer_counter < 17:
+                dealer_cards = dealer_cards + cards[0]
+                dealer_counter = karten_zaehlen(dealer_cards) 
+                cards.pop(0)
+            print(f"Deine Karten: {' '.join(player_cards)}")
+            print(f"Dealer Karten: {' '.join(dealer_cards)}")
+            if dealer_counter > 21:
+                print("Der Dealer hat mehr als 21, du hast gewonnen.")
+                punkte += 1
+            elif dealer_counter < counter:
+                print("Du hast mehr Punkte als der Dealer. Du hast gewonnen.")
+                punkte += 1
+            elif dealer_counter > counter:
+                print("Der Dealer hat mehr Punkte als du. Du hast verloren")
+                dealer_punkte += 1
+            print(f"Spieler: {punkte} \nDealer: {dealer_punkte}")
+        eingabe = input("Möchtest du noch eine Runde spielen? (j/n)")    
+    print("Auf wiedersehen")
